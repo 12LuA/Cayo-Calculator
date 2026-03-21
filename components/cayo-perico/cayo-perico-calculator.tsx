@@ -54,6 +54,8 @@ import {
   FieldTitle,
 } from "@/components/ui/field"
 
+import NumberFlow from '@number-flow/react'
+
 const defaultSettings: Settings = {
   players: 1,
   hardMode: true,
@@ -456,7 +458,7 @@ export default function CayoPericoCalculator() {
               </CardHeader>
               <CardContent>
                 <div className="text-4xl font-black text-emerald-600 md:text-5xl">
-                  {formatMoney(result.finalPayout)}
+                  <NumberFlow value={result.finalPayout} prefix="$"/>
                 </div>
               </CardContent>
             </Card>
