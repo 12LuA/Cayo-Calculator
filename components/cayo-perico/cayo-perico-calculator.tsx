@@ -255,21 +255,21 @@ export default function CayoPericoCalculator() {
                 <CardTitle>Mission Setup</CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">
-                      Number of Players
-                    </span>
+                <Field>
+                  <FieldTitle className="w-full justify-between">
+                    Number of Players
                     <Badge variant="secondary">{settings.players}</Badge>
-                  </div>
+                  </FieldTitle>
                   <Slider
-                    min={1}
-                    max={4}
-                    step={1}
                     value={[settings.players]}
                     onValueChange={(value) =>
                       updateSetting("players", value[0] ?? 1)
                     }
+                    max={4}
+                    min={1}
+                    step={1}
+                    className="mt-2 w-full"
+                    aria-label="Price Range"
                   />
                   <div className="flex justify-between px-0.5 text-xs text-muted-foreground">
                     <span className="text-left">1</span>
@@ -277,7 +277,7 @@ export default function CayoPericoCalculator() {
                     <span className="text-center">3</span>
                     <span className="text-right">4</span>
                   </div>
-                </div>
+                </Field>
 
                 <Field>
                   <FieldLabel>Primary Target</FieldLabel>
