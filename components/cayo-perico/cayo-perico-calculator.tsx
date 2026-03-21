@@ -24,6 +24,7 @@ import { Progress } from "@/components/ui/progress"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -39,6 +40,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/ui/field"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -265,8 +279,8 @@ export default function CayoPericoCalculator() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <span className="text-sm font-medium">Primary Target</span>
+                <Field>
+                  <FieldLabel>Primary Target</FieldLabel>
                   <Select
                     value={settings.primaryTarget}
                     onValueChange={(value) =>
@@ -274,7 +288,7 @@ export default function CayoPericoCalculator() {
                     }
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Target wählen" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {targetsData.targets.primary.map((target) => (
@@ -284,7 +298,7 @@ export default function CayoPericoCalculator() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
+                </Field>
 
                 <Separator />
 
