@@ -54,7 +54,7 @@ import {
   FieldTitle,
 } from "@/components/ui/field"
 
-import NumberFlow from '@number-flow/react'
+import NumberFlow from "@number-flow/react"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -458,7 +458,7 @@ export default function CayoPericoCalculator() {
               </CardHeader>
               <CardContent>
                 <div className="text-4xl font-black text-emerald-600 md:text-5xl">
-                  <NumberFlow value={result.finalPayout} prefix="$"/>
+                  <NumberFlow value={result.finalPayout} prefix="$" />
                 </div>
               </CardContent>
             </Card>
@@ -495,7 +495,6 @@ export default function CayoPericoCalculator() {
                         isCurrent && "ring-2 ring-primary/50",
                         isBest && "bg-emerald-500/10"
                       )}
-                      
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-muted-foreground uppercase">
@@ -518,9 +517,13 @@ export default function CayoPericoCalculator() {
                         {formatMoney(leaderTake)}
                       </div>
 
-                      <div className="text-xs text-muted-foreground">
-                        Cut {maxLeaderCut}% · Total{" "}
-                        {formatMoney(scenarioResult.finalPayout)}
+                      <Separator />
+
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>Cut {maxLeaderCut}%</span>
+                        <span className="font-mono">
+                          Total {formatMoney(scenarioResult.finalPayout)}
+                        </span>
                       </div>
                     </div>
                   )
