@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
+  CardAction,
+  CardFooter,
   CardContent,
   CardDescription,
   CardHeader,
@@ -391,26 +393,29 @@ export default function CayoPericoCalculator() {
                 ))}
               </CardContent>
             </Card>
-            
 
             <Card>
               <CardHeader>
                 <CardTitle>Crew Cuts</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2 rounded-lg border p-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold">Leader</span>
-                    <Badge variant="secondary">{settings.cuts.leader}%</Badge>
-                  </div>
-                  <Slider
-                    value={[settings.cuts.leader]}
-                    min={0}
-                    max={100}
-                    step={5}
-                    disabled
-                  />
-                </div>
+                <Card size="sm" className="rounded-lg">
+                  <CardHeader>
+                    <CardTitle>Leader</CardTitle>
+                    <CardAction>
+                      <Badge variant="secondary">{settings.cuts.leader}%</Badge>
+                    </CardAction>
+                  </CardHeader>
+                  <CardContent>
+                    <Slider
+                      value={[settings.cuts.leader]}
+                      min={0}
+                      max={100}
+                      step={5}
+                      disabled
+                    />
+                  </CardContent>
+                </Card>
 
                 {Array.from({ length: settings.players - 1 }).map(
                   (_, index) => {
