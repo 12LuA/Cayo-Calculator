@@ -463,7 +463,7 @@ export default function CayoPericoCalculator() {
               </CardContent>
             </Card>
 
-            <Card className="border-t-4 border-t-primary">
+            <Card>
               <CardHeader>
                 <CardTitle>Leader&apos;s Optimization Strategy</CardTitle>
                 <CardDescription>
