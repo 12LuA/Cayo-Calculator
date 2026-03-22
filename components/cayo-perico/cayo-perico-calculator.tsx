@@ -49,6 +49,7 @@ import {
 
 import NumberFlow from "@number-flow/react"
 import { ResetCalculatorButton } from "@/components/cayo-perico/reset"
+import { ModeToggle } from "@/components/cayo-perico/mode-toggle"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -248,8 +249,9 @@ export default function CayoPericoCalculator() {
             <CardTitle className="text-2xl">
               Cayo Perico Loot Calculator
             </CardTitle>
-            <CardAction className="self-center">
+            <CardAction className="flex flex-wrap items-center gap-2 md:flex-row">
               <ResetCalculatorButton onReset={resetSettings} />
+              <ModeToggle />
             </CardAction>
           </CardHeader>
         </Card>
