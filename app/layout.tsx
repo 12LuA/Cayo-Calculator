@@ -17,6 +17,7 @@ const fontMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Cayo Calculator',
   description: 'A calculator for the Cayo Perico heist in GTA Online.',
+  keywords: ['GTA Cayo', 'Cayo Perico', 'Cayo Perico Calculator'],
 }
 
 export default function RootLayout({
