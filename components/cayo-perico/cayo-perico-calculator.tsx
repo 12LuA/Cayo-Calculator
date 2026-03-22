@@ -422,7 +422,11 @@ export default function CayoPericoCalculator() {
                     const memberKey =
                       `member${index + 1}` as keyof Settings["cuts"]
                     return (
-                      <Card key={memberKey} size="sm" className="rounded-lg bg-muted/40">
+                      <Card
+                        key={memberKey}
+                        size="sm"
+                        className="rounded-lg bg-muted/40"
+                      >
                         <CardHeader>
                           <CardTitle>Player {index + 2}</CardTitle>
                           <CardAction>
