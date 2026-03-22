@@ -597,7 +597,7 @@ export default function CayoPericoCalculator() {
                     <div className="text-xs tracking-wide text-muted-foreground uppercase">
                       Elite Challenge
                     </div>
-                    <div className="mt-1 text-xl font-bold text-amber-600">
+                    <div className="mt-1 text-xl font-bold">
                       {formatMoney(result.eliteChallenge)}
                     </div>
                     <p className="mt-1 text-xs text-muted-foreground">
