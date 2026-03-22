@@ -492,7 +492,7 @@ export default function CayoPericoCalculator() {
                       key={playerCount}
                       className={cn(
                         "space-y-2 rounded-xl border p-3",
-                        isCurrent && "border-primary ring-2 ring-primary/30",
+                        isCurrent && "ring-2 ring-primary/50",
                         isBest && "bg-emerald-500/10"
                       )}
                       
