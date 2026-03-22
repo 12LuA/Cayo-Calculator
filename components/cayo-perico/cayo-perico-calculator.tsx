@@ -54,8 +54,8 @@ import { ShareButton } from "@/components/cayo-perico/share"
 
 const defaultSettings: Settings = {
   players: 1,
-  hardMode: true,
-  withinCooldown: true,
+  hardMode: false,
+  withinCooldown: false,
   goldAlone: false,
   primaryTarget: "tequila",
   tables: {
