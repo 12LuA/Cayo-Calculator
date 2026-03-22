@@ -363,6 +363,7 @@ export default function CayoPericoCalculator() {
                       <Button
                         size="icon-sm"
                         variant="outline"
+                        disabled={settings.tables[type] <= 0}
                         onClick={() =>
                           updateTable(type, settings.tables[type] - 1)
                         }
