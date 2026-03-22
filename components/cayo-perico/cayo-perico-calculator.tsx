@@ -588,7 +588,7 @@ export default function CayoPericoCalculator() {
                 </CardContent>
               </Card>
 
-              <Card className="border-t-4 border-t-amber-500">
+              <Card>
                 <CardHeader>
                   <CardTitle>Performance</CardTitle>
                 </CardHeader>
