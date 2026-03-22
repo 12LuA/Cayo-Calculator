@@ -467,7 +467,7 @@ export default function CayoPericoCalculator() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-4xl font-black text-emerald-600 md:text-5xl">
+                <div className="text-7xl font-black text-emerald-600">
                   <NumberFlow value={result.finalPayout} prefix="$" />
                 </div>
               </CardContent>
