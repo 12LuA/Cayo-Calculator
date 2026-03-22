@@ -495,6 +495,7 @@ export default function CayoPericoCalculator() {
                         isCurrent && "border-primary ring-2 ring-primary/30",
                         isBest && "bg-emerald-500/10"
                       )}
+                      
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-muted-foreground uppercase">
@@ -502,11 +503,15 @@ export default function CayoPericoCalculator() {
                             ? "Solo"
                             : `${playerCount} Players`}
                         </span>
-                        {isBest ? (
-                          <Badge className="bg-emerald-600 text-white">
-                            Best
-                          </Badge>
-                        ) : null}
+                        <div className="flex items-center gap-1">
+                          {isBest ? (
+                            <Badge className="bg-emerald-600 text-white">
+                              Best
+                            </Badge>
+                          ) : isCurrent ? (
+                            <Badge variant="secondary">Current</Badge>
+                          ) : null}
+                        </div>
                       </div>
 
                       <div className="text-xl font-extrabold">
