@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
-  CardFooter,
   CardContent,
   CardDescription,
   CardHeader,
@@ -26,7 +25,6 @@ import { Progress } from "@/components/ui/progress"
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -45,18 +43,12 @@ import {
 
 import {
   Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
   FieldTitle,
 } from "@/components/ui/field"
 
 import NumberFlow from "@number-flow/react"
+import { ResetCalculatorButton } from "@/components/cayo-perico/reset"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -241,6 +233,13 @@ export default function CayoPericoCalculator() {
     })
   }
 
+  const resetSettings = () => {
+    setSettings(defaultSettings)
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("cayoSettings", JSON.stringify(defaultSettings))
+    }
+  }
+
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
@@ -249,6 +248,9 @@ export default function CayoPericoCalculator() {
             <CardTitle className="text-2xl">
               Cayo Perico Loot Calculator
             </CardTitle>
+            <CardAction className="self-center">
+              <ResetCalculatorButton onReset={resetSettings} />
+            </CardAction>
           </CardHeader>
         </Card>
 
