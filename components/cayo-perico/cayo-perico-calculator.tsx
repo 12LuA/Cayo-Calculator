@@ -642,7 +642,7 @@ export default function CayoPericoCalculator() {
             </div>
 
             {result.results.length > 0 && (
-              <Card className="border-t-4 border-t-cyan-600">
+              <Card>
                 <CardHeader>
                   <CardTitle>Optimal Loot Strategy</CardTitle>
                 </CardHeader>
