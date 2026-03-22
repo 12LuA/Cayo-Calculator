@@ -491,7 +491,7 @@ export default function CayoPericoCalculator() {
                     <div
                       key={playerCount}
                       className={cn(
-                        "space-y-2 rounded-xl border p-3",
+                        "space-y-2 rounded-xl border bg-muted/40 p-3",
                         isCurrent && "ring-2 ring-primary/50",
                         isBest && "bg-emerald-500/10"
                       )}
