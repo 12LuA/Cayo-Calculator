@@ -399,7 +399,7 @@ export default function CayoPericoCalculator() {
                 <CardTitle>Crew Cuts</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Card size="sm" className="rounded-lg">
+                <Card size="sm" className="rounded-lg bg-muted/40">
                   <CardHeader>
                     <CardTitle>Leader</CardTitle>
                     <CardAction>
@@ -422,31 +422,30 @@ export default function CayoPericoCalculator() {
                     const memberKey =
                       `member${index + 1}` as keyof Settings["cuts"]
                     return (
-                      <div
-                        key={memberKey}
-                        className="space-y-2 rounded-lg border p-3"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold">
-                            Player {index + 2}
-                          </span>
-                          <Badge variant="outline">
-                            {settings.cuts[memberKey]}%
-                          </Badge>
-                        </div>
-                        <Slider
-                          min={0}
-                          max={100}
-                          step={5}
-                          value={[settings.cuts[memberKey]]}
-                          onValueChange={(value) =>
-                            updateCut(
-                              memberKey,
-                              value[0] ?? settings.cuts[memberKey]
-                            )
-                          }
-                        />
-                      </div>
+                      <Card key={memberKey} size="sm" className="rounded-lg bg-muted/40">
+                        <CardHeader>
+                          <CardTitle>Player {index + 2}</CardTitle>
+                          <CardAction>
+                            <Badge variant="outline">
+                              {settings.cuts[memberKey]}%
+                            </Badge>
+                          </CardAction>
+                        </CardHeader>
+                        <CardContent>
+                          <Slider
+                            min={0}
+                            max={100}
+                            step={5}
+                            value={[settings.cuts[memberKey]]}
+                            onValueChange={(value) =>
+                              updateCut(
+                                memberKey,
+                                value[0] ?? settings.cuts[memberKey]
+                              )
+                            }
+                          />
+                        </CardContent>
+                      </Card>
                     )
                   }
                 )}
