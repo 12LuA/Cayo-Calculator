@@ -453,7 +453,7 @@ export default function CayoPericoCalculator() {
                 <CardTitle>Estimated Final Payout</CardTitle>
                 <CardDescription>
                   Net profit after fencing and Pavel&apos;s cut. Max potential
-                  with current setup: {formatMoney(maxResult)}
+                  with current setup: {formatMoney(maxResult.finalPayout)}
                 </CardDescription>
               </CardHeader>
               <CardContent>

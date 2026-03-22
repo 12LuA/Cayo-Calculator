@@ -1,5 +1,8 @@
 import data from './data.json';
 
+const BAG_CAPACITY = data.bag_capacity || 1800;
+const VALUE_PRIORITY = ['gold', 'cocaine', 'weed', 'paintings', 'cash'] as const;
+
 export const targetsData = data;
 
 export interface Settings {
@@ -27,125 +30,259 @@ interface LootResult {
   finalPayout: number;
   results: Array<{
     name: string;
+    units: number;
     value: number;
     bags: number;
     presses: number;
   }>;
 }
 
-export function calculateLoot(settings: Settings): LootResult {
-  const primaryTarget = data.targets.primary.find((target) => target.name === settings.primaryTarget);
-  if (!primaryTarget) {
-    return getEmptyResult();
-  }
+type TargetType = (typeof VALUE_PRIORITY)[number];
 
-  const primaryValue = primaryTarget.value[settings.hardMode ? 'hard' : 'standard'];
-  const multiplier = settings.withinCooldown ? primaryTarget.bonus_multiplier : 1;
+function getAverage(min: number, max: number): number {
+  return (min + max) / 2;
+}
 
-  let totalSecondaryValue = 0;
-  const secondaryResults: Array<{
-    name: string;
-    value: number;
-    bags: number;
-    presses: number;
-  }> = [];
-
-  const secondaryTargets = data.targets.secondary.filter((target) => {
-    if (target.name === 'gold' && settings.players === 1 && !settings.goldAlone) {
-      return false;
-    }
-    return settings.tables[target.name] > 0;
-  });
-
-  for (const target of secondaryTargets) {
-    const avgValue = ((target.value.min + target.value.max) / 2) * multiplier;
-    const count = settings.tables[target.name];
-
-    const bagsNeeded = (count * target.full_table_units) / data.bag_capacity;
-    const itemsPerBag = data.bag_capacity / (target.full_table_units / target.pickup_units.length);
-
-    let presses = 0;
-    if (target.pickup_units.length <= 1) {
-      presses = count;
-    } else {
-      presses = Math.ceil(count * itemsPerBag / target.pickup_units[Math.floor(target.pickup_units.length / 2)]);
-    }
-
-    const itemValue = avgValue * count;
-    totalSecondaryValue += itemValue;
-
-    secondaryResults.push({
-      name: target.name,
-      value: itemValue,
-      bags: bagsNeeded,
-      presses,
-    });
-  }
-
-  const officeSafeAvg = (data.targets.office_safe.min + data.targets.office_safe.max) / 2;
-
-  const totalLootValue = primaryValue + totalSecondaryValue;
-  const grossTotal = totalLootValue + officeSafeAvg;
-
-  const fencingFee = grossTotal * 0.1;
-  const pavelCut = grossTotal * 0.02;
-  const eliteChallenge = settings.hardMode ? data.elite_challenge.hard : data.elite_challenge.standard;
-
-  const finalPayout = grossTotal - fencingFee - pavelCut;
-
-  let usedCapacity = 0;
-  for (const target of secondaryTargets) {
-    const count = settings.tables[target.name];
-    usedCapacity += count * target.full_table_units;
+function getTargetData(targetType: TargetType) {
+  const target = data.targets.secondary.find((item) => item.name === targetType);
+  if (!target) {
+    return null;
   }
 
   return {
-    primaryValue,
-    totalSecondaryValue,
-    officeSafe: officeSafeAvg,
+    pickupUnits: target.pickup_units,
+    fullTableUnits: target.full_table_units,
+    minValue: target.value.min,
+    maxValue: target.value.max,
+  };
+}
+
+function calculateLootForTarget(
+  targetType: TargetType,
+  availableTables: number,
+  remainingCapacity: number,
+  allowOverfill = false,
+): { units: number; presses: number; tablesUsed: number } {
+  if (remainingCapacity <= 0 || availableTables <= 0) {
+    return { units: 0, presses: 0, tablesUsed: 0 };
+  }
+
+  const targetData = getTargetData(targetType);
+  if (!targetData) {
+    return { units: 0, presses: 0, tablesUsed: 0 };
+  }
+
+  const { pickupUnits, fullTableUnits } = targetData;
+
+  let totalUnits = 0;
+  let totalPresses = 0;
+  let tablesUsed = 0;
+  let capacityLeft = remainingCapacity;
+
+  for (let tableIndex = 0; tableIndex < availableTables && capacityLeft > 0; tableIndex++) {
+    if (targetType === 'paintings') {
+      if (capacityLeft >= fullTableUnits) {
+        totalUnits += fullTableUnits;
+        totalPresses += 1;
+        tablesUsed++;
+        capacityLeft -= fullTableUnits;
+      } else if (allowOverfill && capacityLeft > 0) {
+        totalUnits += capacityLeft;
+        totalPresses += 1;
+        tablesUsed++;
+        capacityLeft = 0;
+      } else {
+        break;
+      }
+    } else {
+      let unitsFromThisTable = 0;
+      let pressesForThisTable = 0;
+      let lastPressOverfill = 0;
+
+      for (let pickupIndex = 0; pickupIndex < pickupUnits.length; pickupIndex++) {
+        const cumulativeUnits = pickupUnits[pickupIndex];
+        if (cumulativeUnits <= capacityLeft) {
+          unitsFromThisTable = cumulativeUnits;
+          pressesForThisTable = pickupIndex + 1;
+        } else {
+          if (allowOverfill && pickupIndex === pressesForThisTable) {
+            lastPressOverfill = cumulativeUnits;
+          }
+          break;
+        }
+      }
+
+      if (unitsFromThisTable > 0) {
+        totalUnits += unitsFromThisTable;
+        totalPresses += pressesForThisTable;
+        tablesUsed++;
+        capacityLeft -= unitsFromThisTable;
+      }
+
+      if (capacityLeft > 0 && allowOverfill && lastPressOverfill > 0) {
+        totalUnits += capacityLeft;
+        totalPresses += 1;
+        capacityLeft = 0;
+      } else if (unitsFromThisTable === 0) {
+        if (allowOverfill && capacityLeft > 0 && capacityLeft < pickupUnits[0]) {
+          totalUnits += capacityLeft;
+          totalPresses += 1;
+          capacityLeft = 0;
+        }
+        break;
+      }
+    }
+  }
+
+  return { units: totalUnits, presses: totalPresses, tablesUsed };
+}
+
+export function calculateLoot(settings: Settings): LootResult {
+  const players = settings.players;
+  const totalCapacity = players * BAG_CAPACITY;
+  let remainingCapacity = totalCapacity;
+
+  const isHardMode = settings.hardMode ? 'hard' : 'standard';
+  const primaryTargetData = data.targets.primary.find((target) => target.name === settings.primaryTarget);
+  if (!primaryTargetData) {
+    return getEmptyResult(totalCapacity);
+  }
+
+  const withinCooldownBonus = settings.withinCooldown ? primaryTargetData.bonus_multiplier : 1;
+
+  const results: LootResult['results'] = [];
+  let totalSecondaryValue = 0;
+
+  for (const targetType of VALUE_PRIORITY) {
+    if (remainingCapacity <= 0) {
+      break;
+    }
+    if (targetType === 'cash') {
+      continue;
+    }
+
+    const availableTables = settings.tables[targetType] || 0;
+    if (availableTables <= 0) {
+      continue;
+    }
+
+    if (targetType === 'gold' && players === 1 && !settings.goldAlone) {
+      continue;
+    }
+
+    const targetData = getTargetData(targetType);
+    if (!targetData) {
+      continue;
+    }
+
+    if (targetType === 'paintings' && remainingCapacity < targetData.fullTableUnits) {
+      continue;
+    }
+
+    const allowOverfill = targetType !== 'paintings';
+    const lootResult = calculateLootForTarget(targetType, availableTables, remainingCapacity, allowOverfill);
+
+    if (lootResult.units > 0) {
+      const bagsFilled = lootResult.units / BAG_CAPACITY;
+      const avgValue = getAverage(targetData.minValue, targetData.maxValue);
+      const valueCollected = (lootResult.units / targetData.fullTableUnits) * avgValue * withinCooldownBonus;
+
+      results.push({
+        name: targetType,
+        units: lootResult.units,
+        bags: bagsFilled,
+        presses: lootResult.presses,
+        value: valueCollected,
+      });
+
+      totalSecondaryValue += valueCollected;
+      remainingCapacity -= lootResult.units;
+    }
+  }
+
+  if (remainingCapacity > 0) {
+    const cashAvailable = settings.tables.cash || 0;
+    if (cashAvailable > 0) {
+      const targetData = getTargetData('cash');
+      if (targetData) {
+        const lootResult = calculateLootForTarget('cash', cashAvailable, remainingCapacity, true);
+
+        if (lootResult.units > 0) {
+          const bagsFilled = lootResult.units / BAG_CAPACITY;
+          const avgValue = getAverage(targetData.minValue, targetData.maxValue);
+          const valueCollected = (lootResult.units / targetData.fullTableUnits) * avgValue * withinCooldownBonus;
+
+          results.push({
+            name: 'cash',
+            units: lootResult.units,
+            bags: bagsFilled,
+            presses: lootResult.presses,
+            value: valueCollected,
+          });
+
+          totalSecondaryValue += valueCollected;
+          remainingCapacity -= lootResult.units;
+        }
+      }
+    }
+  }
+
+  const primaryValue = primaryTargetData.value[isHardMode];
+  const totalLootValue = (totalSecondaryValue + primaryValue) * data.events_multiplier;
+  const officeSafeAvg = getAverage(data.targets.office_safe.min, data.targets.office_safe.max);
+
+  const fencingFee = totalLootValue * 0.1;
+  const pavelCut = totalLootValue * 0.02;
+  const eliteChallenge = data.elite_challenge[isHardMode];
+
+  const finalPayout = totalLootValue + officeSafeAvg - fencingFee - pavelCut;
+
+  return {
+    results,
     totalLootValue,
-    totalCapacity: data.bag_capacity * 2,
-    remainingCapacity: data.bag_capacity * 2 - usedCapacity,
-    eliteChallenge,
+    finalPayout,
     fees: {
       fencing: fencingFee,
       pavel: pavelCut,
     },
-    finalPayout,
-    results: secondaryResults,
+    officeSafe: officeSafeAvg,
+    eliteChallenge,
+    primaryValue,
+    totalSecondaryValue,
+    remainingCapacity,
+    totalCapacity,
   };
 }
 
-export function calculateMaxPotential(settings: Settings): number {
-  const maxedSettings = {
+export function calculateMaxPotential(settings: Settings): LootResult {
+  const perfectSettings: Settings = {
     ...settings,
     tables: {
-      gold: settings.players === 1 && !settings.goldAlone ? 0 : 5,
-      cocaine: 5,
-      weed: 5,
-      paintings: 5,
-      cash: 5,
+      gold: 10,
+      cocaine: 10,
+      weed: 10,
+      paintings: 10,
+      cash: 10,
     },
   };
 
-  const result = calculateLoot(maxedSettings);
-  return result.finalPayout;
+  return calculateLoot(perfectSettings);
 }
 
-function getEmptyResult(): LootResult {
+function getEmptyResult(totalCapacity: number): LootResult {
   return {
-    primaryValue: 0,
-    totalSecondaryValue: 0,
-    officeSafe: 0,
+    results: [],
     totalLootValue: 0,
-    totalCapacity: data.bag_capacity * 2,
-    remainingCapacity: data.bag_capacity * 2,
-    eliteChallenge: 0,
+    finalPayout: 0,
     fees: {
       fencing: 0,
       pavel: 0,
     },
-    finalPayout: 0,
-    results: [],
+    officeSafe: 0,
+    eliteChallenge: 0,
+    primaryValue: 0,
+    totalSecondaryValue: 0,
+    remainingCapacity: totalCapacity,
+    totalCapacity,
   };
 }
