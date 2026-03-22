@@ -354,7 +354,7 @@ export default function CayoPericoCalculator() {
                 ).map((type) => (
                   <div
                     key={type}
-                    className="flex items-center justify-between rounded-lg border bg-card p-2"
+                    className="flex items-center justify-between rounded-lg border bg-muted/40 p-2"
                   >
                     <span className="text-sm font-medium capitalize">
                       {type}
@@ -390,6 +390,7 @@ export default function CayoPericoCalculator() {
                 ))}
               </CardContent>
             </Card>
+            
 
             <Card>
               <CardHeader>
