@@ -50,6 +50,7 @@ import {
 import NumberFlow from "@number-flow/react"
 import { ResetCalculatorButton } from "@/components/cayo-perico/reset"
 import { ModeToggle } from "@/components/cayo-perico/mode-toggle"
+import { ShareButton } from "@/components/cayo-perico/share"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -133,6 +134,37 @@ export default function CayoPericoCalculator() {
   const [settings, setSettings] = useState<Settings>(() => {
     if (typeof window === "undefined") {
       return defaultSettings
+    }
+
+    // Check if settings are in URL parameters
+    const params = new URLSearchParams(window.location.search)
+    
+    if (params.size > 0) {
+      try {
+        const urlSettings: Settings = {
+          players: parseInt(params.get("amountOfPlayers") || "1"),
+          primaryTarget: params.get("primaryTarget") || "tequila",
+          hardMode: params.get("hardMode") === "true",
+          withinCooldown: params.get("withinCooldown") === "true",
+          goldAlone: params.get("goldAlone") === "true",
+          tables: {
+            gold: parseInt(params.get("gold") || "0"),
+            cocaine: parseInt(params.get("cocaine") || "0"),
+            weed: parseInt(params.get("weed") || "0"),
+            paintings: parseInt(params.get("paintings") || "0"),
+            cash: parseInt(params.get("cash") || "0"),
+          },
+          cuts: {
+            leader: parseInt(params.get("leaderCut") || "100"),
+            member1: parseInt(params.get("member1Cut") || "0"),
+            member2: parseInt(params.get("member2Cut") || "0"),
+            member3: parseInt(params.get("member3Cut") || "0"),
+          },
+        }
+        return urlSettings
+      } catch {
+        // Fall back to localStorage if URL parse fails
+      }
     }
 
     const saved = window.localStorage.getItem("cayoSettings")
@@ -250,6 +282,7 @@ export default function CayoPericoCalculator() {
               Cayo Perico Loot Calculator
             </CardTitle>
             <CardAction className="flex flex-wrap items-center gap-2 md:flex-row">
+              <ShareButton settings={settings} />
               <ResetCalculatorButton onReset={resetSettings} />
               <ModeToggle />
             </CardAction>
