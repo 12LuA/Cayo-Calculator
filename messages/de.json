@@ -1,0 +1,52 @@
+{
+  "language": {
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "calculator": {
+    "title": "Cayo Perico Rechner",
+    "players": "Spieler",
+    "hardMode": "Schwerer Modus",
+    "withinCooldown": "Im 72h Cooldown (Bonus)",
+    "goldAlone": "Gold-Glitch (Solo)",
+    "primaryTarget": "Primäres Ziel",
+    "secondary": "Sekundäre Ziele",
+    "target": "Ziel",
+    "value": "Wert",
+    "total": "Gesamt",
+    "cut": "Anteil",
+    "cuts": "Crew-Anteile",
+    "leader": "Anführer",
+    "member": "Spieler",
+    "current": "Aktuell",
+    "best": "Beste",
+    "profit": "Gewinn",
+    "lootValue": "Finanzielle Übersicht",
+    "costPerPlayer": "Kosten pro Spieler",
+    "profitPerPlayer": "Gewinn pro Spieler",
+    "maxPotential": "Max. Potenzial mit aktuellem Setup: ",
+    "gold": "Gold",
+    "cocaine": "Kokain",
+    "weed": "Gras",
+    "paintings": "Gemälde",
+    "cash": "Bargeld",
+    "click": "Klick",
+    "targets": {
+      "tequila": "Tequila",
+      "ruby_necklace": "Rubinkette",
+      "bearer_bonds": "Inhaberschuldverschreibungen",
+      "pink_diamond": "Pinker Diamant",
+      "panther_statue": "Goldener Panther"
+    },
+    "stack": "Stapel",
+    "fullBag": "Voller Beutel",
+    "fillPercent": "Auslastung %",
+    "bags": "Beutel",
+    "officeSafe": "Bürotresor (Ø)",
+    "eliteChallenge": "Elite-Herausforderung",
+    "fencingFee": "Hehlerei-Gebühr (10%)",
+    "pavelCut": "Pavels Anteil (2%)",
+    "grossTotal": "Brutto Gesamt",
+    "capacityUsed": "Kapazität genutzt"
+  }
+}
