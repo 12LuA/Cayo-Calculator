@@ -10,6 +10,7 @@ import {
   type Settings,
 } from "@/lib/cayo-perico/calculator"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/components/language-context"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -88,12 +89,12 @@ const toLabel = (name: string): string => {
     .join(" ")
 }
 
-const formatActions = (name: string, presses: number): React.ReactNode => {
+const formatActions = (name: string, presses: number, getTranslation: (key: string) => string): React.ReactNode => {
   const target = targetsData.targets.secondary.find(
     (item) => item.name === name
   )
   if (!target) {
-    return `${presses} Click${presses !== 1 ? "s" : ""}`
+    return `${presses} ${getTranslation("calculator.click")}${presses !== 1 ? "s" : ""}`
   }
 
   const actionsPerStack = target.pickup_units.length
@@ -112,13 +113,13 @@ const formatActions = (name: string, presses: number): React.ReactNode => {
           {stacks} Stack{stacks > 1 ? "s" : ""}
         </span>
         <span className="text-xs text-muted-foreground">
-          + {leftover} Click{leftover !== 1 ? "s" : ""}
+          + {leftover} ${getTranslation("calculator.click")}${leftover !== 1 ? "s" : ""}
         </span>
       </span>
     )
   }
 
-  return `${presses} Click${presses !== 1 ? "s" : ""}`
+  return `${presses} ${getTranslation("calculator.click")}${presses !== 1 ? "s" : ""}`
 }
 
 const getLeaderTakeForPlayers = (
@@ -131,6 +132,16 @@ const getLeaderTakeForPlayers = (
 }
 
 export default function CayoPericoCalculator() {
+  const { t } = useLanguage()
+  
+  const getTargetLabel = (name: string): string => {
+    const translatedLabel = t(`calculator.targets.${name}`)
+    if (translatedLabel.startsWith('calculator.targets.')) {
+      return toLabel(name)
+    }
+    return translatedLabel
+  }
+  
   const [settings, setSettings] = useState<Settings>(() => {
     if (typeof window === "undefined") {
       return defaultSettings
@@ -276,29 +287,16 @@ export default function CayoPericoCalculator() {
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">
-              Cayo Perico Loot Calculator
-            </CardTitle>
-            <CardAction className="flex flex-wrap items-center gap-2 md:flex-row">
-              <ShareButton settings={settings} />
-              <ResetCalculatorButton onReset={resetSettings} />
-              <ModeToggle />
-            </CardAction>
-          </CardHeader>
-        </Card>
-
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-5">
             <Card>
               <CardHeader>
-                <CardTitle>Mission Setup</CardTitle>
+                <CardTitle>{t("calculator.primaryTarget")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
                 <Field>
                   <FieldTitle className="w-full justify-between">
-                    Number of Players
+                    {t("calculator.players")}
                     <Badge variant="secondary">{settings.players}</Badge>
                   </FieldTitle>
                   <Slider
@@ -321,7 +319,7 @@ export default function CayoPericoCalculator() {
                 </Field>
 
                 <Field>
-                  <FieldLabel>Primary Target</FieldLabel>
+                  <FieldLabel>{t("calculator.primaryTarget")}</FieldLabel>
                   <Select
                     value={settings.primaryTarget}
                     onValueChange={(value) =>
@@ -334,7 +332,7 @@ export default function CayoPericoCalculator() {
                     <SelectContent>
                       {targetsData.targets.primary.map((target) => (
                         <SelectItem key={target.name} value={target.name}>
-                          {toLabel(target.name)}
+                          {getTargetLabel(target.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -345,7 +343,7 @@ export default function CayoPericoCalculator() {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between rounded-lg border bg-muted/40 p-3">
-                    <span className="text-sm font-medium">Hard Mode</span>
+                    <span className="text-sm font-medium">{t("calculator.hardMode")}</span>
                     <Switch
                       checked={settings.hardMode}
                       onCheckedChange={(checked) =>
@@ -356,7 +354,7 @@ export default function CayoPericoCalculator() {
 
                   <div className="flex items-center justify-between rounded-lg border bg-muted/40 p-3">
                     <span className="text-sm font-medium">
-                      Within 72h Cooldown (Bonus)
+                      {t("calculator.withinCooldown")}
                     </span>
                     <Switch
                       checked={settings.withinCooldown}
@@ -369,7 +367,7 @@ export default function CayoPericoCalculator() {
                   {settings.players === 1 && (
                     <div className="flex items-center justify-between rounded-lg border border-amber-300/70 bg-amber-100/40 p-3 dark:border-amber-700 dark:bg-amber-900/20">
                       <span className="text-sm font-medium">
-                        Gold Glitch (Solo)
+                        {t("calculator.goldAlone")}
                       </span>
                       <Switch
                         checked={settings.goldAlone}
@@ -385,7 +383,7 @@ export default function CayoPericoCalculator() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Available Loot Tables</CardTitle>
+                <CardTitle>{t("calculator.secondary")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {(
@@ -395,8 +393,8 @@ export default function CayoPericoCalculator() {
                     key={type}
                     className="flex items-center justify-between rounded-lg border bg-muted/40 p-2"
                   >
-                    <span className="text-sm font-medium capitalize">
-                      {type}
+                    <span className="text-sm font-medium">
+                      {t(`calculator.${type}`)}
                     </span>
                     <div className="flex items-center gap-2">
                       <Button
@@ -406,7 +404,6 @@ export default function CayoPericoCalculator() {
                         onClick={() =>
                           updateTable(type, settings.tables[type] - 1)
                         }
-                        aria-label={`${type} verringern`}
                       >
                         <Minus className="size-4" />
                       </Button>
@@ -421,7 +418,6 @@ export default function CayoPericoCalculator() {
                         onClick={() =>
                           updateTable(type, settings.tables[type] + 1)
                         }
-                        aria-label={`${type} erhöhen`}
                       >
                         <Plus className="size-4" />
                       </Button>
@@ -433,12 +429,12 @@ export default function CayoPericoCalculator() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Crew Cuts</CardTitle>
+                <CardTitle>{t("calculator.cuts")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Card size="sm" className="rounded-lg bg-muted/40">
                   <CardHeader>
-                    <CardTitle>Leader</CardTitle>
+                    <CardTitle>{t("calculator.leader")}</CardTitle>
                     <CardAction>
                       <Badge variant="secondary">{settings.cuts.leader}%</Badge>
                     </CardAction>
@@ -465,7 +461,7 @@ export default function CayoPericoCalculator() {
                         className="rounded-lg bg-muted/40"
                       >
                         <CardHeader>
-                          <CardTitle>Player {index + 2}</CardTitle>
+                          <CardTitle>{t("calculator.member")} {index + 2}</CardTitle>
                           <CardAction>
                             <Badge variant="outline">
                               {settings.cuts[memberKey]}%
@@ -497,11 +493,15 @@ export default function CayoPericoCalculator() {
           <div className="space-y-6 lg:col-span-7">
             <Card>
               <CardHeader>
-                <CardTitle>Estimated Final Payout</CardTitle>
+                <CardTitle>{t("calculator.profit")}</CardTitle>
                 <CardDescription>
-                  Net profit after fencing and Pavel&apos;s cut. Max potential
-                  with current setup: {formatMoney(maxResult.finalPayout)}
+                  {t("calculator.costPerPlayer")} und {t("calculator.profitPerPlayer")}. {t("calculator.maxPotential")}
+                  {formatMoney(maxResult.finalPayout)}
                 </CardDescription>
+              <CardAction className="flex gap-2 md:flex-row">
+                <ShareButton settings={settings} />
+                <ResetCalculatorButton onReset={resetSettings} />
+              </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-7xl font-black text-emerald-600">
@@ -512,10 +512,10 @@ export default function CayoPericoCalculator() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Leader&apos;s Optimization Strategy</CardTitle>
+                <CardTitle>{t("calculator.leader")} {t("calculator.profit")}</CardTitle>
                 <CardDescription>
-                  Which crew size pays you the most when everyone else gets
-                  minimum 15%?
+                  Welche {t("calculator.players")}-Zahl zahlt dir am meisten, wenn{" "}
+                  alle anderen mindestens 15% bekommen?
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -547,15 +547,15 @@ export default function CayoPericoCalculator() {
                         <span className="text-xs font-semibold text-muted-foreground uppercase">
                           {playerCount === 1
                             ? "Solo"
-                            : `${playerCount} Players`}
+                            : `${playerCount} ${t("calculator.players")}`}
                         </span>
                         <div className="flex items-center gap-1">
                           {isBest ? (
                             <Badge className="bg-emerald-600 text-white">
-                              Best
+                              {t("calculator.best")}
                             </Badge>
                           ) : isCurrent ? (
-                            <Badge variant="secondary">Current</Badge>
+                            <Badge variant="secondary">{t("calculator.current")}</Badge>
                           ) : null}
                         </div>
                       </div>
@@ -567,9 +567,9 @@ export default function CayoPericoCalculator() {
                       <Separator />
 
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>Cut {maxLeaderCut}%</span>
+                        <span>{t("calculator.cut")} {maxLeaderCut}%</span>
                         <span className="font-mono">
-                          Total {formatMoney(scenarioResult.finalPayout)}
+                          {t("calculator.total")} {formatMoney(scenarioResult.finalPayout)}
                         </span>
                       </div>
                     </div>
@@ -581,31 +581,31 @@ export default function CayoPericoCalculator() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Financial Breakdown</CardTitle>
+                  <CardTitle>{t("calculator.lootValue")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableBody>
                       <TableRow>
-                        <TableCell>Primary Target</TableCell>
+                        <TableCell>{t("calculator.primaryTarget")}</TableCell>
                         <TableCell className="text-right font-mono">
                           {formatMoney(result.primaryValue)}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Secondary Loot</TableCell>
+                        <TableCell>{t("calculator.secondary")}</TableCell>
                         <TableCell className="text-right font-mono">
                           {formatMoney(result.totalSecondaryValue)}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Office Safe (Avg)</TableCell>
+                        <TableCell>{t("calculator.officeSafe")}</TableCell>
                         <TableCell className="text-right font-mono">
                           {formatMoney(result.officeSafe)}
                         </TableCell>
                       </TableRow>
                       <TableRow className="font-semibold">
-                        <TableCell>Gross Total</TableCell>
+                        <TableCell>{t("calculator.grossTotal")}</TableCell>
                         <TableCell className="text-right font-mono">
                           {formatMoney(
                             result.totalLootValue + result.officeSafe
@@ -614,7 +614,7 @@ export default function CayoPericoCalculator() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="text-destructive">
-                          Fencing Fee (10%)
+                          {t("calculator.fencingFee")}
                         </TableCell>
                         <TableCell className="text-right font-mono text-destructive">
                           -{formatMoney(result.fees.fencing)}
@@ -622,7 +622,7 @@ export default function CayoPericoCalculator() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="text-destructive">
-                          Pavel&apos;s Cut (2%)
+                          {t("calculator.pavelCut")}
                         </TableCell>
                         <TableCell className="text-right font-mono text-destructive">
                           -{formatMoney(result.fees.pavel)}
@@ -635,12 +635,12 @@ export default function CayoPericoCalculator() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Performance</CardTitle>
+                  <CardTitle>{t("calculator.profit")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="rounded-lg border bg-muted/40 p-4">
                     <div className="text-xs tracking-wide text-muted-foreground uppercase">
-                      Elite Challenge
+                      {t("calculator.eliteChallenge")}
                     </div>
                     <div className="mt-1 text-xl font-bold">
                       {formatMoney(result.eliteChallenge)}
@@ -671,7 +671,7 @@ export default function CayoPericoCalculator() {
                       }
                     />
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Capacity Used
+                      {t("calculator.capacityUsed")}
                     </p>
                   </div>
                 </CardContent>
@@ -681,7 +681,7 @@ export default function CayoPericoCalculator() {
             {result.results.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Optimal Loot Strategy</CardTitle>
+                  <CardTitle>{t("calculator.profit")} {t("calculator.secondary")}</CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {result.results.map((item, index) => (
@@ -690,18 +690,18 @@ export default function CayoPericoCalculator() {
                       className="rounded-xl border bg-muted/40 p-4"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold capitalize">
-                          {item.name}
+                        <span className="text-sm font-semibold">
+                          {t(`calculator.${item.name}`)}
                         </span>
                         <Badge variant="outline">
-                          {item.bags.toFixed(2)} Bags
+                          {item.bags.toFixed(2)} {t("calculator.bags")}
                         </Badge>
                       </div>
                       <div className="mt-2 text-lg font-bold text-primary">
                         {formatMoney(item.value)}
                       </div>
                       <div className="mt-2 text-xs text-muted-foreground">
-                        {formatActions(item.name, item.presses)}
+                        {formatActions(item.name, item.presses, t)}
                       </div>
                     </div>
                   ))}
@@ -711,12 +711,12 @@ export default function CayoPericoCalculator() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Crew Shares</CardTitle>
+                <CardTitle>{t("calculator.cuts")}</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <div className="rounded-xl border bg-muted/40 p-4 text-center">
                   <div className="text-xs tracking-wide text-muted-foreground uppercase">
-                    Leader
+                    {t("calculator.leader")}
                   </div>
                   <div className="mt-1 text-lg font-extrabold text-primary">
                     {formatMoney(
@@ -735,7 +735,7 @@ export default function CayoPericoCalculator() {
                         className="rounded-xl border bg-muted/40 p-4 text-center"
                       >
                         <div className="text-xs tracking-wide text-muted-foreground uppercase">
-                          Player {index + 2}
+                          {t("calculator.member")} {index + 2}
                         </div>
                         <div className="mt-1 text-lg font-extrabold">
                           {formatMoney(
@@ -754,16 +754,16 @@ export default function CayoPericoCalculator() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Secondary Loot Values</CardTitle>
+            <CardTitle>{t("calculator.secondary")} {t("calculator.value")}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Target</TableHead>
-                  <TableHead className="text-right">Stack</TableHead>
-                  <TableHead className="text-right">Full Bag</TableHead>
-                  <TableHead className="text-right">Fill %</TableHead>
+                  <TableHead>{t("calculator.target")}</TableHead>
+                  <TableHead className="text-right">{t("calculator.stack")}</TableHead>
+                  <TableHead className="text-right">{t("calculator.fullBag")}</TableHead>
+                  <TableHead className="text-right">{t("calculator.fillPercent")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -786,8 +786,8 @@ export default function CayoPericoCalculator() {
 
                   return (
                     <TableRow key={target.name}>
-                      <TableCell className="font-medium capitalize">
-                        {target.name}
+                      <TableCell className="font-medium">
+                        {t(`calculator.${target.name}`)}
                       </TableCell>
                       <TableCell className="text-right font-mono">
                         {formatMoney(avgValue)}
