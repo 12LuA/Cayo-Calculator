@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'Casino Heist Calculator - GTA Online Crew Payouts',
     description: 'Optimize your Casino Heist crew setup and calculate maximum earnings instantly.',
     type: 'website',
-    url: 'https://cayo-calculator.vercel.app/casino-calculator',
+    url: 'https://gta-tools.vercel.app/casino-calculator',
   },
   twitter: {
     card: 'summary_large_image',

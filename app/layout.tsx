@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 export function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://cayo-calculator.vercel.app/',
+      url: 'https://gta-tools.vercel.app/',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,
