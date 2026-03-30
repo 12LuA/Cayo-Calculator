@@ -27,6 +27,17 @@ import {
   FieldTitle,
 } from "@/components/ui/field"
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
 type VaultValue = "cash" | "artwork" | "gold" | "diamond"
 type GunmanValue = "karl" | "charlie" | "packie"
 type DriverValue = "karim" | "taliana" | "eddie" | "chester"
@@ -245,7 +256,12 @@ export function CasinoCalculatorForm() {
                     <FieldContent>
                       <FieldTitle>Daily Vault</FieldTitle>
                     </FieldContent>
-                    <Switch checked={false} disabled aria-label="Daily Vault" id="daily-vault" />
+                    <Switch
+                      checked={false}
+                      disabled
+                      aria-label="Daily Vault"
+                      id="daily-vault"
+                    />
                   </Field>
                 </FieldLabel>
 
@@ -254,7 +270,12 @@ export function CasinoCalculatorForm() {
                     <FieldContent>
                       <FieldTitle>Hand Drill</FieldTitle>
                     </FieldContent>
-                    <Switch checked={false} disabled aria-label="Hand Drill" id="hand-drill"/>
+                    <Switch
+                      checked={false}
+                      disabled
+                      aria-label="Hand Drill"
+                      id="hand-drill"
+                    />
                   </Field>
                 </FieldLabel>
 
@@ -272,7 +293,6 @@ export function CasinoCalculatorForm() {
                   </Field>
                 </FieldLabel>
               </FieldGroup>
-
 
               <div className="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="text-sm text-muted-foreground">
@@ -340,47 +360,50 @@ export function CasinoCalculatorForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  Planifier (Lester Crest)
-                </span>
-                <span className="font-medium">
-                  {formatMoney(plannerTake)} GTA $
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  Gunman ({GUNMAN_LABEL[gunman]})
-                </span>
-                <span className="font-medium">
-                  {formatMoney(gunmanTake)} GTA $
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  Driver ({DRIVER_LABEL[driver]})
-                </span>
-                <span className="font-medium">
-                  {formatMoney(driverTake)} GTA $
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  Hacker ({HACKER_LABEL[hacker]})
-                </span>
-                <span className="font-medium">
-                  {formatMoney(hackerTake)} GTA $
-                </span>
-              </div>
-              <div className="my-2 h-px bg-border" />
-              <div className="flex items-center justify-between text-base">
-                <span className="font-semibold">
-                  Remaining After Support Crew
-                </span>
-                <span className="font-semibold">
-                  {formatMoney(remainingAfterSupport)} GTA $
-                </span>
-              </div>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">
+                      Planifier (Lester Crest)
+                    </TableCell>
+                    <TableCell className="text-right">
+                      ${formatMoney(plannerTake)}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">
+                      Gunman ({GUNMAN_LABEL[gunman]})
+                    </TableCell>
+                    <TableCell className="text-right">
+                      ${formatMoney(gunmanTake)}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">
+                      Driver ({DRIVER_LABEL[driver]})
+                    </TableCell>
+                    <TableCell className="text-right">
+                      ${formatMoney(driverTake)}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">
+                      Hacker ({HACKER_LABEL[hacker]})
+                    </TableCell>
+                    <TableCell className="text-right">
+                      ${formatMoney(hackerTake)}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell>Remaining After Support Crew</TableCell>
+                    <TableCell className="text-right">
+                      ${formatMoney(remainingAfterSupport)}
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
             </CardContent>
           </Card>
         </div>
