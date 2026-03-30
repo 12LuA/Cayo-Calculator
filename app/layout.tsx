@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-context"
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { SiteNavigation } from "@/components/site-navigation"
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'})
 
@@ -17,9 +18,9 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Cayo Calculator',
-  description: 'A calculator for the Cayo Perico heist in GTA Online.',
-  keywords: ['GTA Cayo', 'Cayo Perico', 'Cayo Perico Calculator'],
+  title: 'Cayo Calculator - GTA Online Heist Earnings Calculator',
+  description: 'Free Cayo Perico heist calculator for GTA Online. Calculate optimal earnings, maximize loot, and profit from the best heist strategy. Simple and powerful calculator tool.',
+  keywords: ['GTA Cayo', 'Cayo Perico', 'Cayo Perico Calculator', 'Heist Calculator', 'GTA Online Money', 'Loot Guide'],
   robots: {
     index: true,
     follow: true,
@@ -60,7 +61,10 @@ export default function RootLayout({
       <body>
         <LanguageProvider>
           <ThemeProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              <SiteNavigation />
+              {children}
+            </TooltipProvider>
           </ThemeProvider>
         </LanguageProvider>
         <Analytics />

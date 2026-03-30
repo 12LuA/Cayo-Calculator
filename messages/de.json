@@ -3,6 +3,47 @@
     "english": "English",
     "german": "Deutsch"
   },
+  "casino-calculator": {
+    "title": "So nutzt du den Rechner",
+    "calculatorTitle": "Casino-Heist-Rechner",
+    "calculatorDescription": "Stelle deine Crew zusammen und berechne den voraussichtlichen finalen Spieleranteil.",
+    "vaultContent": "Tresorinhalt",
+    "selectVaultContent": "Tresorinhalt auswählen",
+    "planner": "Planer",
+    "lesterTake": "Lester Crest (5%)",
+    "gunman": "Schütze",
+    "selectGunman": "Schützen auswählen",
+    "driver": "Fahrer",
+    "selectDriver": "Fahrer auswählen",
+    "hacker": "Hacker",
+    "selectHacker": "Hacker auswählen",
+    "buyer": "Käufer",
+    "selectBuyer": "Käufer auswählen",
+    "launderingFee": "Waschgebühr",
+    "dailyVault": "Tagestresor",
+    "handDrill": "Handbohrer",
+    "hardMode": "Schwerer Modus",
+    "results": "Ergebnisse",
+    "resultsDescription": "Finale Ausgabe basierend auf deiner gewählten Crew und Tresorbedingungen.",
+    "potentialEarnings": "Potenzielle Einnahmen",
+    "supportCrewTake": "Anteil der Support-Crew",
+    "playersTake": "Spieleranteil",
+    "currentSupportCrewTake": "Aktueller Anteil der Support-Crew",
+    "payoutDescription": "Auszahlung pro Crew-Mitglied basierend auf deinem aktuellen Setup.",
+    "buyerFee": "Käufergebühr",
+    "remainingAfterAllFees": "Verbleibend nach allen Gebühren",
+    "buyerLevels": {
+      "high": "Weite Entfernung",
+      "middle": "Mittlere Entfernung",
+      "low": "Nahe Entfernung"
+    },
+    "vault": {
+      "cash": "Bargeld",
+      "artwork": "Kunst",
+      "gold": "Gold",
+      "diamonds": "Diamanten"
+    }
+  },
   "calculator": {
     "title": "Cayo Perico Rechner",
     "players": "Spieler",

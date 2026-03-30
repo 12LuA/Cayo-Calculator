@@ -52,7 +52,6 @@ import NumberFlow from "@number-flow/react"
 import { ResetCalculatorButton } from "@/components/cayo-perico/reset"
 import { ModeToggle } from "@/components/cayo-perico/mode-toggle"
 import { ShareButton } from "@/components/cayo-perico/share"
-import { LanguageSelector } from "@/components/language-selector"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -288,20 +287,6 @@ export default function CayoPericoCalculator() {
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">
-              {t("calculator.title")}
-            </CardTitle>
-            <CardAction className="flex flex-wrap items-center gap-2 md:flex-row">
-              <LanguageSelector />
-              <ShareButton settings={settings} />
-              <ResetCalculatorButton onReset={resetSettings} />
-              <ModeToggle />
-            </CardAction>
-          </CardHeader>
-        </Card>
-
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-5">
             <Card>
@@ -513,6 +498,10 @@ export default function CayoPericoCalculator() {
                   {t("calculator.costPerPlayer")} und {t("calculator.profitPerPlayer")}. {t("calculator.maxPotential")}
                   {formatMoney(maxResult.finalPayout)}
                 </CardDescription>
+              <CardAction className="flex gap-2 md:flex-row">
+                <ShareButton settings={settings} />
+                <ResetCalculatorButton onReset={resetSettings} />
+              </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-7xl font-black text-emerald-600">

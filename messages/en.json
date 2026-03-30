@@ -3,6 +3,47 @@
     "english": "English",
     "german": "Deutsch"
   },
+  "casino-calculator": {
+    "title": "How To Use The Calculator",
+    "calculatorTitle": "Casino Heist Calculator",
+    "calculatorDescription": "Build your crew setup and run the estimate for your final player cut.",
+    "vaultContent": "Vault Content",
+    "selectVaultContent": "Select vault content",
+    "planner": "Planner",
+    "lesterTake": "Lester Crest (5%)",
+    "gunman": "Gunman",
+    "selectGunman": "Select gunman",
+    "driver": "Driver",
+    "selectDriver": "Select driver",
+    "hacker": "Hacker",
+    "selectHacker": "Select hacker",
+    "buyer": "Buyer",
+    "selectBuyer": "Select buyer",
+    "launderingFee": "laundering fee",
+    "dailyVault": "Daily Vault",
+    "handDrill": "Hand Drill",
+    "hardMode": "Hard Mode",
+    "results": "Results",
+    "resultsDescription": "Final output based on your selected crew and vault conditions.",
+    "potentialEarnings": "Potential Earnings",
+    "supportCrewTake": "Support Crew Take",
+    "playersTake": "Player's Take",
+    "currentSupportCrewTake": "Current Support Crew Take",
+    "payoutDescription": "Payout per crew member based on your current setup.",
+    "buyerFee": "Buyer Fee",
+    "remainingAfterAllFees": "Remaining After All Fees",
+    "buyerLevels": {
+      "high": "High level",
+      "middle": "Middle level",
+      "low": "Low level"
+    },
+    "vault": {
+      "cash": "Cash",
+      "artwork": "Artwork",
+      "gold": "Gold",
+      "diamonds": "Diamonds"
+    }
+  },
   "calculator": {
     "title": "Cayo Perico Loot Calculator",
     "players": "Players",

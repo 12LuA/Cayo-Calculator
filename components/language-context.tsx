@@ -15,7 +15,6 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     // Load translations and get saved locale from localStorage
@@ -24,7 +23,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       if (savedLocale && LOCALES.includes(savedLocale)) {
         setLocaleState(savedLocale)
       }
-      setMounted(true)
     })
   }, [])
 
@@ -35,10 +33,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const translate = (key: string): string => {
     return t(key, locale)
-  }
-
-  if (!mounted) {
-    return <>{children}</>
   }
 
   return (
