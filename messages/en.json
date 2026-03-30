@@ -1,0 +1,52 @@
+{
+  "language": {
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "calculator": {
+    "title": "Cayo Perico Loot Calculator",
+    "players": "Players",
+    "hardMode": "Hard Mode",
+    "withinCooldown": "Within 72h Cooldown (Bonus)",
+    "goldAlone": "Gold Glitch (Solo)",
+    "primaryTarget": "Primary Target",
+    "secondary": "Secondary Targets",
+    "target": "Target",
+    "value": "Value",
+    "total": "Total",
+    "cut": "Cut",
+    "cuts": "Crew Cuts",
+    "leader": "Leader",
+    "member": "Member",
+    "current": "Current",
+    "best": "Best",
+    "profit": "Profit",
+    "lootValue": "Financial Breakdown",
+    "costPerPlayer": "Cost Per Player",
+    "profitPerPlayer": "Profit Per Player",
+    "maxPotential": "Max potential with current setup: ",
+    "gold": "Gold",
+    "cocaine": "Cocaine",
+    "weed": "Weed",
+    "paintings": "Paintings",
+    "cash": "Cash",
+    "click": "Click",
+    "targets": {
+      "tequila": "Tequila",
+      "ruby_necklace": "Ruby Necklace",
+      "bearer_bonds": "Bearer Bonds",
+      "pink_diamond": "Pink Diamond",
+      "panther_statue": "Panther Statue"
+    },
+    "stack": "Stack",
+    "fullBag": "Full Bag",
+    "fillPercent": "Fill %",
+    "bags": "Bags",
+    "officeSafe": "Office Safe (Avg)",
+    "eliteChallenge": "Elite Challenge",
+    "fencingFee": "Fencing Fee (10%)",
+    "pavelCut": "Pavel's Cut (2%)",
+    "grossTotal": "Gross Total",
+    "capacityUsed": "Capacity Used"
+  }
+}
