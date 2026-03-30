@@ -1,6 +1,7 @@
 'use client'
 
 import { useLanguage } from '@/components/language-context'
+import "flag-icons/css/flag-icons.min.css";
 import {
   Select,
   SelectContent,
@@ -14,12 +15,18 @@ export function LanguageSelector() {
 
   return (
     <Select value={locale} onValueChange={setLocale}>
-      <SelectTrigger className="w-32">
+      <SelectTrigger>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="en">{t('language.english')}</SelectItem>
-        <SelectItem value="de">{t('language.german')}</SelectItem>
+        <SelectItem value="en">
+          <span className="fi fi-us rounded-xs" />
+          {t('language.english')}
+        </SelectItem>
+        <SelectItem value="de">
+          <span className="fi fi-de rounded-xs" />
+          {t('language.german')}
+        </SelectItem>
       </SelectContent>
     </Select>
   )
