@@ -251,7 +251,10 @@ export function CasinoCalculatorForm() {
               <Separator />
 
               <FieldGroup>
-                <FieldLabel htmlFor="daily-vault">
+                <FieldLabel
+                  htmlFor="daily-vault"
+                  className="bg-muted/30 has-data-checked:bg-primary/10"
+                >
                   <Field orientation="horizontal">
                     <FieldContent>
                       <FieldTitle>Daily Vault</FieldTitle>
@@ -265,7 +268,10 @@ export function CasinoCalculatorForm() {
                   </Field>
                 </FieldLabel>
 
-                <FieldLabel htmlFor="hand-drill">
+                <FieldLabel
+                  htmlFor="hand-drill"
+                  className="bg-muted/30 has-data-checked:bg-primary/10"
+                >
                   <Field orientation="horizontal">
                     <FieldContent>
                       <FieldTitle>Hand Drill</FieldTitle>
@@ -279,7 +285,10 @@ export function CasinoCalculatorForm() {
                   </Field>
                 </FieldLabel>
 
-                <FieldLabel htmlFor="hard-mode">
+                <FieldLabel
+                  htmlFor="hard-mode"
+                  className="bg-muted/30 has-data-checked:bg-primary/10"
+                >
                   <Field orientation="horizontal">
                     <FieldContent>
                       <FieldTitle>Hard Mode</FieldTitle>
@@ -293,14 +302,6 @@ export function CasinoCalculatorForm() {
                   </Field>
                 </FieldLabel>
               </FieldGroup>
-
-              <div className="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="text-sm text-muted-foreground">
-                  <p>
-                    Current vault value: {formatMoney(currentVaultValue)} GTA $
-                  </p>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>
