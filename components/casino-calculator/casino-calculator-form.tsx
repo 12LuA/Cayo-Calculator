@@ -30,11 +30,8 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table"
 
@@ -42,6 +39,7 @@ type VaultValue = "cash" | "artwork" | "gold" | "diamond"
 type GunmanValue = "karl" | "charlie" | "packie"
 type DriverValue = "karim" | "taliana" | "eddie" | "chester"
 type HackerValue = "rickie" | "christian" | "avi" | "paige"
+type BuyerValue = "high" | "middle" | "low"
 
 const VAULT_VALUES: Record<VaultValue, number> = {
   cash: 2_115_000,
@@ -68,6 +66,18 @@ const HACKER_RATE: Record<HackerValue, number> = {
   christian: 0.07,
   avi: 0.1,
   paige: 0.09,
+}
+
+const BUYER_RATE: Record<BuyerValue, number> = {
+  high: 0,
+  middle: 0.05,
+  low: 0.1,
+}
+
+const BUYER_LABEL: Record<BuyerValue, string> = {
+  high: "High level",
+  middle: "Middle level",
+  low: "Low level",
 }
 
 const GUNMAN_LABEL: Record<GunmanValue, string> = {
@@ -106,6 +116,7 @@ export function CasinoCalculatorForm() {
   const [gunman, setGunman] = useState<GunmanValue>("karl")
   const [driver, setDriver] = useState<DriverValue>("karim")
   const [hacker, setHacker] = useState<HackerValue>("rickie")
+  const [buyer, setBuyer] = useState<BuyerValue>("high")
   const [hardMode, setHardMode] = useState(false)
 
   const currentVaultValue = useMemo(() => {
@@ -120,19 +131,20 @@ export function CasinoCalculatorForm() {
   const hackerTake = Math.round(currentVaultValue * HACKER_RATE[hacker])
   const totalSupportTake = plannerTake + gunmanTake + driverTake + hackerTake
   const remainingAfterSupport = currentVaultValue - totalSupportTake
+  const buyerTake = Math.round(remainingAfterSupport * BUYER_RATE[buyer])
+  const remainingAfterBuyer = remainingAfterSupport - buyerTake
 
   const result = useMemo(() => {
-    let supportRate = 0.05
-    supportRate += GUNMAN_RATE[gunman]
-    supportRate += DRIVER_RATE[driver]
-    supportRate += HACKER_RATE[hacker]
-    supportRate = Math.round(supportRate * 100) / 100
+    const supportRateRaw =
+      0.05 + GUNMAN_RATE[gunman] + DRIVER_RATE[driver] + HACKER_RATE[hacker]
+    const supportRate = Math.round(supportRateRaw * 100) / 100
 
-    const playerRate = 1 - supportRate
-    const playerEarnings = Math.round(currentVaultValue * playerRate)
+    const buyerRate = BUYER_RATE[buyer]
+    const playerRate = remainingAfterBuyer / currentVaultValue
+    const playerEarnings = remainingAfterBuyer
 
-    return { supportRate, playerRate, playerEarnings }
-  }, [gunman, driver, hacker, currentVaultValue])
+    return { supportRate, buyerRate, playerRate, playerEarnings }
+  }, [gunman, driver, hacker, buyer, remainingAfterBuyer, currentVaultValue])
 
   return (
     <div className="relative mx-auto w-full max-w-6xl">
@@ -247,6 +259,25 @@ export function CasinoCalculatorForm() {
                   </Select>
                 </Field>
               </div>
+
+              <Separator />
+
+              <Field>
+                <FieldLabel htmlFor="buyer">Buyer</FieldLabel>
+                <Select
+                  value={buyer}
+                  onValueChange={(value) => setBuyer(value as BuyerValue)}
+                >
+                  <SelectTrigger id="buyer" className="w-full">
+                    <SelectValue placeholder="Select buyer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high">High level (0% laundering fee)</SelectItem>
+                    <SelectItem value="middle">Middle level (5% laundering fee)</SelectItem>
+                    <SelectItem value="low">Low level (10% laundering fee)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
 
               <Separator />
 
@@ -395,12 +426,20 @@ export function CasinoCalculatorForm() {
                       ${formatMoney(hackerTake)}
                     </TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">
+                      Buyer Fee ({BUYER_LABEL[buyer]})
+                    </TableCell>
+                    <TableCell className="text-right">
+                      ${formatMoney(buyerTake)}
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell>Remaining After Support Crew</TableCell>
+                    <TableCell>Remaining After All Fees</TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(remainingAfterSupport)}
+                      ${formatMoney(remainingAfterBuyer)}
                     </TableCell>
                   </TableRow>
                 </TableFooter>
