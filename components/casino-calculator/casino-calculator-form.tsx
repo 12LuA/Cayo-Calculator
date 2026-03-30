@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { Separator } from "@/components/ui/separator"
+import { useLanguage } from "@/components/language-context"
 
 import {
   Card,
@@ -74,10 +75,10 @@ const BUYER_RATE: Record<BuyerValue, number> = {
   low: 0.1,
 }
 
-const BUYER_LABEL: Record<BuyerValue, string> = {
-  high: "High level",
-  middle: "Middle level",
-  low: "Low level",
+const BUYER_LABEL_KEY: Record<BuyerValue, string> = {
+  high: "buyerLevels.high",
+  middle: "buyerLevels.middle",
+  low: "buyerLevels.low",
 }
 
 const GUNMAN_LABEL: Record<GunmanValue, string> = {
@@ -100,18 +101,23 @@ const HACKER_LABEL: Record<HackerValue, string> = {
   paige: "Paige Harris",
 }
 
-const formatMoney = (amount: number): string => {
-  return new Intl.NumberFormat("en-US", {
+const formatMoney = (amount: number, locale: "en" | "de"): string => {
+  return new Intl.NumberFormat(locale === "de" ? "de-DE" : "en-US", {
     maximumFractionDigits: 0,
   }).format(amount)
 }
 
-const formatPercent = (value: number): string => {
+const formatPercent = (value: number, locale: "en" | "de"): string => {
   const percent = value * 100
-  return Number.isInteger(percent) ? `${percent}` : percent.toFixed(2)
+  return new Intl.NumberFormat(locale === "de" ? "de-DE" : "en-US", {
+    minimumFractionDigits: Number.isInteger(percent) ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(percent)
 }
 
 export function CasinoCalculatorForm() {
+  const { t, locale } = useLanguage()
+
   const [vault, setVault] = useState<VaultValue>("cash")
   const [gunman, setGunman] = useState<GunmanValue>("karl")
   const [driver, setDriver] = useState<DriverValue>("karim")
@@ -151,61 +157,60 @@ export function CasinoCalculatorForm() {
       <div className="relative grid gap-6 lg:grid-cols-12">
         <Card className="lg:col-span-7">
           <CardHeader>
-            <CardTitle>Casino Heist Calculator</CardTitle>
+            <CardTitle>{t("casino-calculator.calculatorTitle")}</CardTitle>
             <CardDescription>
-              Build your crew setup and run the estimate for your final player
-              cut.
+              {t("casino-calculator.calculatorDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <Field>
-                  <FieldLabel htmlFor="vault">Vault Content</FieldLabel>
+                  <FieldLabel htmlFor="vault">{t("casino-calculator.vaultContent")}</FieldLabel>
                   <Select
                     value={vault}
                     onValueChange={(value) => setVault(value as VaultValue)}
                   >
                     <SelectTrigger id="vault" className="w-full">
-                      <SelectValue placeholder="Select vault content" />
+                      <SelectValue placeholder={t("casino-calculator.selectVaultContent")} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="cash">
-                        Cash (2,115,000 GTA$)
+                        {t("casino-calculator.vault.cash")} (2,115,000 GTA$)
                       </SelectItem>
                       <SelectItem value="artwork">
-                        Artwork (2,350,000 GTA$)
+                        {t("casino-calculator.vault.artwork")} (2,350,000 GTA$)
                       </SelectItem>
                       <SelectItem value="gold">
-                        Gold (2,585,000 GTA$)
+                        {t("casino-calculator.vault.gold")} (2,585,000 GTA$)
                       </SelectItem>
                       <SelectItem value="diamond">
-                        Diamonds (3,290,000 GTA$)
+                        {t("casino-calculator.vault.diamonds")} (3,290,000 GTA$)
                       </SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>
 
                 <Field>
-                  <FieldLabel htmlFor="planifier">Planifier</FieldLabel>
+                  <FieldLabel htmlFor="planifier">{t("casino-calculator.planner")}</FieldLabel>
                   <Select value="lester" disabled>
                     <SelectTrigger id="planifier" className="w-full">
-                      <SelectValue placeholder="Lester Crest (5%)" />
+                      <SelectValue placeholder={t("casino-calculator.lesterTake")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="lester">Lester Crest (5%)</SelectItem>
+                      <SelectItem value="lester">{t("casino-calculator.lesterTake")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>
 
                 <Field>
-                  <FieldLabel htmlFor="gunman">Gunman</FieldLabel>
+                  <FieldLabel htmlFor="gunman">{t("casino-calculator.gunman")}</FieldLabel>
                   <Select
                     value={gunman}
                     onValueChange={(value) => setGunman(value as GunmanValue)}
                   >
                     <SelectTrigger id="gunman" className="w-full">
-                      <SelectValue placeholder="Select gunman" />
+                      <SelectValue placeholder={t("casino-calculator.selectGunman")} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="karl">Karl Aboujali (5%)</SelectItem>
@@ -218,13 +223,13 @@ export function CasinoCalculatorForm() {
                 </Field>
 
                 <Field>
-                  <FieldLabel htmlFor="driver">Driver</FieldLabel>
+                  <FieldLabel htmlFor="driver">{t("casino-calculator.driver")}</FieldLabel>
                   <Select
                     value={driver}
                     onValueChange={(value) => setDriver(value as DriverValue)}
                   >
                     <SelectTrigger id="driver" className="w-full">
-                      <SelectValue placeholder="Select driver" />
+                      <SelectValue placeholder={t("casino-calculator.selectDriver")} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="karim">Karim Denz (5%)</SelectItem>
@@ -240,13 +245,13 @@ export function CasinoCalculatorForm() {
                 </Field>
 
                 <Field className="md:col-span-2">
-                  <FieldLabel htmlFor="hacker">Hacker</FieldLabel>
+                  <FieldLabel htmlFor="hacker">{t("casino-calculator.hacker")}</FieldLabel>
                   <Select
                     value={hacker}
                     onValueChange={(value) => setHacker(value as HackerValue)}
                   >
                     <SelectTrigger id="hacker" className="w-full">
-                      <SelectValue placeholder="Select hacker" />
+                      <SelectValue placeholder={t("casino-calculator.selectHacker")} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="rickie">Rickie Lukens (3%)</SelectItem>
@@ -263,23 +268,23 @@ export function CasinoCalculatorForm() {
               <Separator />
 
               <Field>
-                <FieldLabel htmlFor="buyer">Buyer</FieldLabel>
+                <FieldLabel htmlFor="buyer">{t("casino-calculator.buyer")}</FieldLabel>
                 <Select
                   value={buyer}
                   onValueChange={(value) => setBuyer(value as BuyerValue)}
                 >
                   <SelectTrigger id="buyer" className="w-full">
-                    <SelectValue placeholder="Select buyer" />
+                    <SelectValue placeholder={t("casino-calculator.selectBuyer")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="high">
-                      High level (0% laundering fee)
+                      {t("casino-calculator.buyerLevels.high")} (0% {t("casino-calculator.launderingFee")})
                     </SelectItem>
                     <SelectItem value="middle">
-                      Middle level (5% laundering fee)
+                      {t("casino-calculator.buyerLevels.middle")} (5% {t("casino-calculator.launderingFee")})
                     </SelectItem>
                     <SelectItem value="low">
-                      Low level (10% laundering fee)
+                      {t("casino-calculator.buyerLevels.low")} (10% {t("casino-calculator.launderingFee")})
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -294,12 +299,12 @@ export function CasinoCalculatorForm() {
                 >
                   <Field orientation="horizontal">
                     <FieldContent>
-                      <FieldTitle>Daily Vault</FieldTitle>
+                        <FieldTitle>{t("casino-calculator.dailyVault")}</FieldTitle>
                     </FieldContent>
                     <Switch
                       checked={false}
                       disabled
-                      aria-label="Daily Vault"
+                      aria-label={t("casino-calculator.dailyVault")}
                       id="daily-vault"
                     />
                   </Field>
@@ -311,12 +316,12 @@ export function CasinoCalculatorForm() {
                 >
                   <Field orientation="horizontal">
                     <FieldContent>
-                      <FieldTitle>Hand Drill</FieldTitle>
+                        <FieldTitle>{t("casino-calculator.handDrill")}</FieldTitle>
                     </FieldContent>
                     <Switch
                       checked={false}
                       disabled
-                      aria-label="Hand Drill"
+                      aria-label={t("casino-calculator.handDrill")}
                       id="hand-drill"
                     />
                   </Field>
@@ -328,13 +333,13 @@ export function CasinoCalculatorForm() {
                 >
                   <Field orientation="horizontal">
                     <FieldContent>
-                      <FieldTitle>Hard Mode</FieldTitle>
+                        <FieldTitle>{t("casino-calculator.hardMode")}</FieldTitle>
                     </FieldContent>
                     <Switch
                       id="hard-mode"
                       checked={hardMode}
                       onCheckedChange={setHardMode}
-                      aria-label="Hard Mode"
+                      aria-label={t("casino-calculator.hardMode")}
                     />
                   </Field>
                 </FieldLabel>
@@ -346,45 +351,45 @@ export function CasinoCalculatorForm() {
         <div className="space-y-4 lg:col-span-5">
           <Card className="">
             <CardHeader>
-              <CardTitle>Results</CardTitle>
+              <CardTitle>{t("casino-calculator.results")}</CardTitle>
               <CardDescription>
-                Final output based on your selected crew and vault conditions.
+                {t("casino-calculator.resultsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="rounded-lg border bg-primary/10 p-4">
                 <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                  Potential Earnings
+                  {t("casino-calculator.potentialEarnings")}
                 </p>
                 <p
                   id="earn"
                   className="mt-1 text-3xl font-semibold tracking-tight"
                 >
-                  {`$${formatMoney(result.playerEarnings)}`}
+                  {`$${formatMoney(result.playerEarnings, locale)}`}
                 </p>
               </div>
 
               <div className="rounded-lg border bg-muted/30 p-4">
                 <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                  Support Crew Take
+                  {t("casino-calculator.supportCrewTake")}
                 </p>
                 <p
                   id="supportTake"
                   className="mt-1 text-2xl font-semibold tracking-tight"
                 >
-                  {`${formatPercent(result.supportRate)} %`}
+                  {`${formatPercent(result.supportRate, locale)} %`}
                 </p>
               </div>
 
               <div className="rounded-lg border bg-muted/30 p-4">
                 <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                  Player&apos;s Take
+                  {t("casino-calculator.playersTake")}
                 </p>
                 <p
                   id="playerTake"
                   className="mt-1 text-2xl font-semibold tracking-tight"
                 >
-                  {`${formatPercent(result.playerRate)} %`}
+                  {`${formatPercent(result.playerRate, locale)} %`}
                 </p>
               </div>
             </CardContent>
@@ -392,9 +397,9 @@ export function CasinoCalculatorForm() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Current Support Crew Take</CardTitle>
+              <CardTitle>{t("casino-calculator.currentSupportCrewTake")}</CardTitle>
               <CardDescription>
-                Payout per crew member based on your current setup.
+                {t("casino-calculator.payoutDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
@@ -402,50 +407,50 @@ export function CasinoCalculatorForm() {
                 <TableBody>
                   <TableRow>
                     <TableCell className="font-medium">
-                      Planifier (Lester Crest)
+                      {t("casino-calculator.planner")} (Lester Crest)
                     </TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(plannerTake)}
+                      ${formatMoney(plannerTake, locale)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">
-                      Gunman ({GUNMAN_LABEL[gunman]})
+                      {t("casino-calculator.gunman")} ({GUNMAN_LABEL[gunman]})
                     </TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(gunmanTake)}
+                      ${formatMoney(gunmanTake, locale)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">
-                      Driver ({DRIVER_LABEL[driver]})
+                      {t("casino-calculator.driver")} ({DRIVER_LABEL[driver]})
                     </TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(driverTake)}
+                      ${formatMoney(driverTake, locale)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">
-                      Hacker ({HACKER_LABEL[hacker]})
+                      {t("casino-calculator.hacker")} ({HACKER_LABEL[hacker]})
                     </TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(hackerTake)}
+                      ${formatMoney(hackerTake, locale)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">
-                      Buyer Fee ({BUYER_LABEL[buyer]})
+                      {t("casino-calculator.buyerFee")} ({t(`casino-calculator.${BUYER_LABEL_KEY[buyer]}`)})
                     </TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(buyerTake)}
+                      ${formatMoney(buyerTake, locale)}
                     </TableCell>
                   </TableRow>
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell>Remaining After All Fees</TableCell>
+                    <TableCell>{t("casino-calculator.remainingAfterAllFees")}</TableCell>
                     <TableCell className="text-right">
-                      ${formatMoney(remainingAfterBuyer)}
+                      ${formatMoney(remainingAfterBuyer, locale)}
                     </TableCell>
                   </TableRow>
                 </TableFooter>
