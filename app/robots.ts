@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://cayo-calculator.vercel.app/sitemap.xml',
+    sitemap: 'https://gta-tools.vercel.app/sitemap.xml',
   }
 }
