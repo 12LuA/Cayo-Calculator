@@ -272,9 +272,15 @@ export function CasinoCalculatorForm() {
                     <SelectValue placeholder="Select buyer" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="high">High level (0% laundering fee)</SelectItem>
-                    <SelectItem value="middle">Middle level (5% laundering fee)</SelectItem>
-                    <SelectItem value="low">Low level (10% laundering fee)</SelectItem>
+                    <SelectItem value="high">
+                      High level (0% laundering fee)
+                    </SelectItem>
+                    <SelectItem value="middle">
+                      Middle level (5% laundering fee)
+                    </SelectItem>
+                    <SelectItem value="low">
+                      Low level (10% laundering fee)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
@@ -346,6 +352,18 @@ export function CasinoCalculatorForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
+              <div className="rounded-lg border bg-primary/10 p-4">
+                <p className="text-xs tracking-wide text-muted-foreground uppercase">
+                  Potential Earnings
+                </p>
+                <p
+                  id="earn"
+                  className="mt-1 text-3xl font-semibold tracking-tight"
+                >
+                  {`$${formatMoney(result.playerEarnings)}`}
+                </p>
+              </div>
+
               <div className="rounded-lg border bg-muted/30 p-4">
                 <p className="text-xs tracking-wide text-muted-foreground uppercase">
                   Support Crew Take
@@ -367,18 +385,6 @@ export function CasinoCalculatorForm() {
                   className="mt-1 text-2xl font-semibold tracking-tight"
                 >
                   {`${formatPercent(result.playerRate)} %`}
-                </p>
-              </div>
-
-              <div className="rounded-lg border bg-primary/10 p-4">
-                <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                  Potential Earnings
-                </p>
-                <p
-                  id="earn"
-                  className="mt-1 text-3xl font-semibold tracking-tight"
-                >
-                  {`${formatMoney(result.playerEarnings)} GTA $`}
                 </p>
               </div>
             </CardContent>
