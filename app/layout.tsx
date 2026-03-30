@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-context"
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { SiteNavigation } from "@/components/site-navigation"
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'})
 
@@ -60,7 +61,10 @@ export default function RootLayout({
       <body>
         <LanguageProvider>
           <ThemeProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              <SiteNavigation />
+              {children}
+            </TooltipProvider>
           </ThemeProvider>
         </LanguageProvider>
         <Analytics />
