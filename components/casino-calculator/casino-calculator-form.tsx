@@ -338,7 +338,7 @@ export function CasinoCalculatorForm() {
         </Card>
 
         <div className="space-y-4 lg:col-span-5">
-          <Card className="lg:sticky lg:top-8">
+          <Card className="">
             <CardHeader>
               <CardTitle>Results</CardTitle>
               <CardDescription>
