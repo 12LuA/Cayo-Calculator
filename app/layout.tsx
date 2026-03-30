@@ -18,9 +18,9 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Cayo Calculator',
-  description: 'A calculator for the Cayo Perico heist in GTA Online.',
-  keywords: ['GTA Cayo', 'Cayo Perico', 'Cayo Perico Calculator'],
+  title: 'Cayo Calculator - GTA Online Heist Earnings Calculator',
+  description: 'Free Cayo Perico heist calculator for GTA Online. Calculate optimal earnings, maximize loot, and profit from the best heist strategy. Simple and powerful calculator tool.',
+  keywords: ['GTA Cayo', 'Cayo Perico', 'Cayo Perico Calculator', 'Heist Calculator', 'GTA Online Money', 'Loot Guide'],
   robots: {
     index: true,
     follow: true,
