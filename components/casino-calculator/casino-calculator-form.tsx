@@ -153,7 +153,7 @@ export function CasinoCalculatorForm() {
   }, [gunman, driver, hacker, buyer, remainingAfterBuyer, currentVaultValue])
 
   return (
-    <div className="relative mx-auto w-full max-w-6xl">
+    <div className="relative mx-auto w-full max-w-7xl">
       <div className="relative grid gap-6 lg:grid-cols-12">
         <Card className="lg:col-span-7">
           <CardHeader>
