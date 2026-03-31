@@ -1,4 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "vignette.wikia.nocookie.net",
+			},
+			{
+				protocol: "https",
+				hostname: "static.wikia.nocookie.net",
+			},
+		],
+	},
+}
 
 export default nextConfig

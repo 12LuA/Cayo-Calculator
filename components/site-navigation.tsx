@@ -38,6 +38,10 @@ export function SiteNavigation() {
       href: "/casino-calculator",
       label: "Diamond Casino Heist Profit Calculator",
     },
+    {
+      href: "/vehicle-search",
+      label: resolveLabel("vehicleSearch.title", "Fahrzeugsuche"),
+    },
   ]
 
   return (
