@@ -15,15 +15,33 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE)
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
-    // Load translations and get saved locale from localStorage
+    let isMounted = true
+
+    // Load translations and initialize locale from storage or browser settings.
     loadTranslations().then(() => {
+      if (!isMounted) return
+
       const savedLocale = localStorage.getItem('locale') as Locale | null
+      const browserLocale = navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en'
+
+      let initialLocale: Locale = DEFAULT_LOCALE
+
       if (savedLocale && LOCALES.includes(savedLocale)) {
-        setLocaleState(savedLocale)
+        initialLocale = savedLocale
+      } else if (LOCALES.includes(browserLocale)) {
+        initialLocale = browserLocale
       }
+
+      setLocaleState(initialLocale)
+      setIsReady(true)
     })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const setLocale = (newLocale: Locale) => {
@@ -32,6 +50,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }
 
   const translate = (key: string): string => {
+    if (!isReady) {
+      return key
+    }
     return t(key, locale)
   }
 
