@@ -1,7 +1,6 @@
 import { Geist_Mono, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from 'next'
-import type { MetadataRoute } from 'next'
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -34,17 +33,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-}
-
-export function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: 'https://gta-tools.vercel.app/',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 1,
-    },
-  ]
 }
 
 export default function RootLayout({
