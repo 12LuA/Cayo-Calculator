@@ -1,6 +1,7 @@
 import { Geist_Mono, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from 'next'
+import Script from "next/script"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -47,14 +48,14 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
     >
-      <head>
-        <script
-          defer
-          data-domain='gta-tools.vercel.app'
-          src='https://analytics.12lua.de/js/pa-49oXBgE1wurFRew90mj3k.js'
-        ></script>
-      </head>
       <body>
+        <Script
+          src="https://analytics.12lua.de/js/pa-49oXBgE1wurFRew90mj3k.js"
+          strategy="afterInteractive"
+        />
+        <Script id="plausible-init" strategy="afterInteractive">
+          {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}
+        </Script>
         <LanguageProvider>
           <ThemeProvider>
             <TooltipProvider>
