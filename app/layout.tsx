@@ -47,6 +47,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
     >
+      <head>
+        <script
+          defer
+          data-domain='gta-tools.vercel.app'
+          src='https://analytics.12lua.de/js/pa-49oXBgE1wurFRew90mj3k.js'
+        ></script>
+      </head>
       <body>
         <LanguageProvider>
           <ThemeProvider>
