@@ -8,11 +8,7 @@ import { LanguageProvider } from "@/components/language-context"
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { SiteNavigation } from "@/components/site-navigation"
-import { init } from '@plausible-analytics/tracker'
 
-init({
-  domain: 'analytics.12lua.de'
-})
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'})
 
