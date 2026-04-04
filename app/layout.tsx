@@ -69,7 +69,7 @@ export default function RootLayout({
         />
         <Script id="plausible-init" strategy="afterInteractive">
           {
-            "window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()"
+            "window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init({customProperties:function(){var browserLanguage=navigator.language||navigator.userLanguage;return browserLanguage?{browser_language:browserLanguage}:{}}})"
           }
         </Script>
         <LanguageProvider>
