@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import type { Settings } from "@/lib/cayo-perico/calculator"
+import { trackPlausibleGoal } from "@/lib/plausible"
 
 type ShareButtonProps = {
   settings: Settings
@@ -44,6 +45,10 @@ export function ShareButton({ settings }: ShareButtonProps) {
 
       // Copy to clipboard
       await navigator.clipboard.writeText(shareUrl)
+      trackPlausibleGoal("Share Settings", {
+        players: settings.players,
+        primaryTarget: settings.primaryTarget,
+      })
 
       // Show feedback
       setCopied(true)

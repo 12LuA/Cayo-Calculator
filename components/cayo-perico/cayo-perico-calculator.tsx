@@ -52,6 +52,7 @@ import NumberFlow from "@number-flow/react"
 import { ResetCalculatorButton } from "@/components/cayo-perico/reset"
 import { ModeToggle } from "@/components/cayo-perico/mode-toggle"
 import { ShareButton } from "@/components/cayo-perico/share"
+import { trackPlausibleGoal } from "@/lib/plausible"
 
 const defaultSettings: Settings = {
   players: 1,
@@ -208,6 +209,11 @@ export default function CayoPericoCalculator() {
     if (key === "players") {
       const newPlayers = value as number
 
+      trackPlausibleGoal("Calculator Settings Changed", {
+        setting: "players",
+        value: newPlayers,
+      })
+
       setSettings((prev) => {
         const oldPlayers = prev.players
         const newCuts = { ...prev.cuts }
@@ -244,10 +250,20 @@ export default function CayoPericoCalculator() {
       return
     }
 
+    trackPlausibleGoal("Calculator Settings Changed", {
+      setting: String(key),
+      value: String(value),
+    })
+
     setSettings((prev) => ({ ...prev, [key]: value }))
   }
 
   const updateTable = (type: keyof Settings["tables"], value: number) => {
+    trackPlausibleGoal("Calculator Settings Changed", {
+      setting: `table:${type}`,
+      value,
+    })
+
     setSettings((prev) => ({
       ...prev,
       tables: { ...prev.tables, [type]: Math.max(0, value) },
@@ -255,6 +271,11 @@ export default function CayoPericoCalculator() {
   }
 
   const updateCut = (member: keyof Settings["cuts"], value: number) => {
+    trackPlausibleGoal("Calculator Settings Changed", {
+      setting: `cut:${member}`,
+      value,
+    })
+
     setSettings((prev) => {
       if (member === "leader") return prev
       if (value < 15) return prev
@@ -278,6 +299,7 @@ export default function CayoPericoCalculator() {
   }
 
   const resetSettings = () => {
+    trackPlausibleGoal("Reset Settings")
     setSettings(defaultSettings)
     if (typeof window !== "undefined") {
       window.localStorage.setItem("cayoSettings", JSON.stringify(defaultSettings))
