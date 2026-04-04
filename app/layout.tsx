@@ -1,7 +1,6 @@
 import { Geist_Mono, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from 'next'
-import Script from "next/script"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -9,6 +8,7 @@ import { LanguageProvider } from "@/components/language-context"
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { SiteNavigation } from "@/components/site-navigation"
+import { PlausibleProvider } from "@/components/PlausibleProvider"
 
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'})
@@ -49,13 +49,7 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
     >
       <body>
-        <Script
-          src="https://analytics.12lua.de/js/pa-49oXBgE1wurFRew90mj3k.js"
-          strategy="afterInteractive"
-        />
-        <Script id="plausible-init" strategy="afterInteractive">
-          {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();`}
-        </Script>
+        <PlausibleProvider />
         <LanguageProvider>
           <ThemeProvider>
             <TooltipProvider>
