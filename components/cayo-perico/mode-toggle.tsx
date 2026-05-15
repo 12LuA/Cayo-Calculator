@@ -5,12 +5,15 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
+import { trackPlausibleGoal } from "@/lib/plausible"
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
+    const nextTheme = theme === "dark" ? "light" : "dark"
+    trackPlausibleGoal("Toggle Theme", { theme: nextTheme })
+    setTheme(nextTheme)
   }
 
   return (

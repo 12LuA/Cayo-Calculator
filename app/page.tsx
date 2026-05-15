@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: 'Cayo Perico Loot Calculator - GTA Online Heist Earnings',
     description: 'Calculate your Cayo Perico heist earnings instantly. Optimize loot, crew cuts, and strategies for maximum profit.',
     type: 'website',
-    url: 'https://gta-tools.vercel.app/',
+    url: 'https://gta-tools.vercel.app',
   },
   twitter: {
     card: 'summary_large_image',
